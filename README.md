@@ -1,49 +1,45 @@
-﻿# GlobalEcon Intelligence
+﻿# MacroLens
 
-> Live IMF World Economic Outlook dashboard — 196 countries, 353,544 observations, real-time charts
+> Global macroeconomic intelligence — 196 countries, 353,544 IMF data points, live charts
 
-## Overview
-GlobalEcon Intelligence is a production-grade economic data platform built on the IMF World Economic Outlook dataset. It covers 196 sovereign states across 145 economic indicators from 1980 to 2030, with real-time data refresh via Supabase.
+## What it does
+MacroLens is a production-grade economic data platform built on the IMF World Economic Outlook dataset. It surfaces complex macroeconomic data in a clean, accessible dashboard — built for analysts, researchers, students, and anyone curious about the world economy.
 
-## Features
-- **5 analytical tabs** — Overview, GDP & Growth, Inflation, Debt & Fiscal, Country Explorer
-- **196-country search** — live search across all sovereign states
-- **Real-time updates** — Supabase Realtime auto-refreshes charts when new data is ingested
-- **Zero hardcoded values** — every figure pulls directly from the database
-- **Security hardened** — CSP, HSTS, X-Frame-Options, Permissions-Policy headers
-- **Fully responsive** — mobile hamburger menu, scrollable tab strip on tablet
+## Coverage
+- **196 sovereign states** with full economic profiles
+- **145 indicators** — GDP, inflation, debt, trade, employment, demographics
+- **1980 to 2030** — historical data plus IMF projections
+- **Zero hardcoded values** — every figure pulls live from the database
 
-## Tech Stack
-| Layer | Technology |
+## Tabs
+| Tab | What you see |
 |---|---|
-| Frontend | Next.js 16, TypeScript, Tailwind CSS v4 |
-| Charts | Recharts |
-| Animation | Framer Motion |
-| Database | Supabase (PostgreSQL) |
-| Deployment | Vercel |
+| Overview | World GDP trend, key economic signals, dataset composition |
+| GDP & Growth | Growth by economic group, largest economies, GDP per capita |
+| Inflation | Global CPI trajectory, 2022 crisis analysis, country extremes |
+| Debt & Fiscal | Government debt rankings, fiscal balance, country comparisons |
+| Country Explorer | Full economic profile for any of 196 countries with live search |
 
-## Data Source
-All data sourced from the **IMF World Economic Outlook 2024** release.
-353,544 observations · 196 countries · 145 indicators · 1980–2030
+## Stack
+`Next.js 16` `TypeScript` `Tailwind CSS v4` `Supabase` `Recharts` `Framer Motion` `Vercel`
 
-*Not affiliated with or endorsed by the International Monetary Fund.*
-
-## Getting Started
-
-\\\ash
+## Local setup
+```bash
 npm install
 cp .env.example .env.local
-# Fill in your Supabase credentials
+# Add your Supabase credentials
 npm run dev
-\\\
+```
 
-## Environment Variables
-
-\\\
+## Environment variables
+```
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
-NEXT_PUBLIC_BASE_URL=https://your-app.vercel.app
-\\\
+NEXT_PUBLIC_BASE_URL=https://macrolens.vercel.app
+```
+
+## Data source
+IMF World Economic Outlook 2024 — Not affiliated with or endorsed by the IMF.
 
 ## License
 MIT
