@@ -106,7 +106,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="manifest" href="/manifest.json" />
-        <meta name="google-site-verification" content="xwWleL67HnkmX5Dhn-O43G9m-AYlBUmygivSQD_MhEo" />
+        <meta name="google-site-verification" content="xwWleL67HnkmX5Dhn-O43G9m-AYlBUmygivSQD_MhEo"/>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
