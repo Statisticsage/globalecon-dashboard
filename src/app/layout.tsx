@@ -1,21 +1,22 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://globalecon-dashboard.vercel.app";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://globaleconmacrolens.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "MacroLens | Global Economic Intelligence Platform",
+    default: "MacroLens — Live Global Macroeconomic Intelligence Dashboard",
     template: "%s | MacroLens",
   },
   description:
-    "MacroLens is a live macroeconomic intelligence platform covering 196 countries, 145 IMF indicators and projections to 2030. Explore GDP growth, inflation, government debt and fiscal balance in real time.",
+    "Explore live IMF economic data for 196 countries — GDP growth, inflation rates, government debt and fiscal balance with real-time charts and projections to 2030. Free macroeconomic intelligence platform.",
   keywords: [
-    "macroeconomics","IMF economic data","world economic outlook","GDP growth",
-    "global inflation","government debt","economic dashboard","WEO 2024",
-    "macroeconomic indicators","fiscal balance","economic forecast","MacroLens",
-    "country economic data","IMF WEO","economic intelligence",
+    "macroeconomics dashboard","IMF economic data","world economic outlook 2024",
+    "GDP growth by country","global inflation tracker","government debt GDP ratio",
+    "country economic profile","WEO dashboard","macroeconomic indicators",
+    "fiscal balance tracker","economic forecast 2030","IMF WEO live data",
+    "MacroLens","free economic data","196 countries economic data",
   ],
   authors:   [{ name: "MacroLens" }],
   creator:   "MacroLens",
@@ -23,33 +24,42 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
-    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
   openGraph: {
     type: "website",
     locale: "en_US",
     url: BASE_URL,
     siteName: "MacroLens",
-    title: "MacroLens | Global Economic Intelligence Platform",
+    title: "MacroLens — Live Global Macroeconomic Intelligence Dashboard",
     description:
-      "Live macroeconomic intelligence — 196 countries, 353,544 IMF data points, projections to 2030.",
+      "Explore live IMF economic data for 196 countries. GDP growth, inflation, government debt and fiscal balance — real-time charts, projections to 2030.",
     images: [
       {
-        url: "/og-image.png",
+        url: `${BASE_URL}/og-image.png`,
         width: 1200,
         height: 630,
-        alt: "MacroLens — Global Economic Intelligence Dashboard",
+        alt: "MacroLens — Global Macroeconomic Intelligence Dashboard showing GDP growth, inflation and debt data for 196 countries",
+        type: "image/png",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "MacroLens | Global Economic Intelligence",
+    title: "MacroLens — Live Global Macroeconomic Intelligence",
     description:
-      "Live macroeconomic intelligence — 196 countries, 353,544 IMF data points, projections to 2030.",
-    images: ["/og-image.png"],
+      "Explore live IMF economic data for 196 countries. GDP growth, inflation, government debt — real-time charts, projections to 2030.",
+    images: [`${BASE_URL}/og-image.png`],
+    creator: "@macrolens",
   },
   alternates: { canonical: BASE_URL },
+  category: "finance",
 };
 
 export const viewport: Viewport = {
@@ -64,14 +74,24 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "MacroLens",
+  "url": BASE_URL,
   "description":
     "Live IMF World Economic Outlook dashboard covering 196 countries and 145 economic indicators from 1980 to 2030.",
-  "url": BASE_URL,
   "applicationCategory": "FinanceApplication",
   "operatingSystem": "Any",
+  "browserRequirements": "Requires JavaScript",
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-  "author": { "@type": "Organization", "name": "MacroLens" },
-  "keywords": "IMF, macroeconomics, GDP, inflation, government debt, world economy, MacroLens",
+  "author": { "@type": "Organization", "name": "MacroLens", "url": BASE_URL },
+  "keywords": "IMF, macroeconomics, GDP, inflation, government debt, world economy, economic dashboard",
+  "inLanguage": "en",
+  "isAccessibleForFree": true,
+  "featureList": [
+    "196 country economic profiles",
+    "Real-time GDP growth tracking",
+    "Global inflation monitoring",
+    "Government debt analysis",
+    "IMF projections to 2030",
+  ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -86,6 +106,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="manifest" href="/manifest.json" />
+        <meta name="google-site-verification" content="xwWleL67HnkmX5Dhn-O43G9m-AYlBUmygivSQD_MhEo" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

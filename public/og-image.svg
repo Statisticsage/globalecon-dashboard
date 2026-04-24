@@ -1,0 +1,88 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#070b14"/>
+      <stop offset="100%" style="stop-color:#0e1422"/>
+    </linearGradient>
+    <linearGradient id="glow1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00e5cc;stop-opacity:0.15"/>
+      <stop offset="100%" style="stop-color:#00e5cc;stop-opacity:0"/>
+    </linearGradient>
+    <linearGradient id="glow2" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f5c842;stop-opacity:0.12"/>
+      <stop offset="100%" style="stop-color:#f5c842;stop-opacity:0"/>
+    </linearGradient>
+    <linearGradient id="bar1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#00e5cc"/>
+      <stop offset="100%" style="stop-color:#00e5cc;stop-opacity:0.3"/>
+    </linearGradient>
+    <linearGradient id="bar2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f5c842"/>
+      <stop offset="100%" style="stop-color:#f5c842;stop-opacity:0.3"/>
+    </linearGradient>
+    <linearGradient id="bar3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff6b6b"/>
+      <stop offset="100%" style="stop-color:#ff6b6b;stop-opacity:0.3"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Glow orbs -->
+  <ellipse cx="200" cy="150" rx="400" ry="300" fill="url(#glow1)" opacity="0.6"/>
+  <ellipse cx="1050" cy="100" rx="350" ry="250" fill="url(#glow2)" opacity="0.6"/>
+
+  <!-- Top border line -->
+  <rect x="0" y="0" width="1200" height="2" fill="url(#bar2)"/>
+
+  <!-- Logo mark -->
+  <rect x="80" y="80" width="44" height="44" rx="10" fill="rgba(245,200,66,0.15)" stroke="rgba(245,200,66,0.4)" stroke-width="1.5"/>
+  <rect x="92" y="92" width="20" height="20" rx="4" fill="#f5c842"/>
+
+  <!-- Brand name -->
+  <text x="140" y="110" font-family="Georgia, serif" font-size="36" font-style="italic" fill="white">Macro</text>
+  <text x="228" y="110" font-family="Georgia, serif" font-size="36" font-style="italic" fill="#f5c842">Lens</text>
+
+  <!-- Tagline -->
+  <text x="140" y="132" font-family="monospace" font-size="11" fill="rgba(255,255,255,0.3)" letter-spacing="2">GLOBAL ECONOMIC INTELLIGENCE</text>
+
+  <!-- Main headline -->
+  <text x="80" y="240" font-family="Georgia, serif" font-size="58" fill="white" font-weight="400">Live Macroeconomic</text>
+  <text x="80" y="310" font-family="Georgia, serif" font-size="58" fill="white" font-weight="400">Intelligence Platform</text>
+
+  <!-- Description -->
+  <text x="80" y="370" font-family="sans-serif" font-size="22" fill="rgba(255,255,255,0.5)">IMF data for 196 countries · GDP · Inflation · Debt · Forecasts to 2030</text>
+
+  <!-- Stats pills -->
+  <rect x="80" y="420" width="180" height="48" rx="24" fill="rgba(245,200,66,0.1)" stroke="rgba(245,200,66,0.25)" stroke-width="1"/>
+  <text x="170" y="450" font-family="monospace" font-size="18" fill="#f5c842" text-anchor="middle" font-weight="600">353,544</text>
+  <text x="170" y="465" font-family="monospace" font-size="10" fill="rgba(245,200,66,0.6)" text-anchor="middle">Observations</text>
+
+  <rect x="276" y="420" width="140" height="48" rx="24" fill="rgba(0,229,204,0.1)" stroke="rgba(0,229,204,0.25)" stroke-width="1"/>
+  <text x="346" y="450" font-family="monospace" font-size="18" fill="#00e5cc" text-anchor="middle" font-weight="600">196</text>
+  <text x="346" y="465" font-family="monospace" font-size="10" fill="rgba(0,229,204,0.6)" text-anchor="middle">Countries</text>
+
+  <rect x="432" y="420" width="170" height="48" rx="24" fill="rgba(77,159,255,0.1)" stroke="rgba(77,159,255,0.25)" stroke-width="1"/>
+  <text x="517" y="450" font-family="monospace" font-size="18" fill="#4d9fff" text-anchor="middle" font-weight="600">1980–2030</text>
+  <text x="517" y="465" font-family="monospace" font-size="10" fill="rgba(77,159,255,0.6)" text-anchor="middle">Coverage</text>
+
+  <!-- Live badge -->
+  <rect x="80" y="498" width="80" height="26" rx="13" fill="rgba(0,229,204,0.1)" stroke="rgba(0,229,204,0.3)" stroke-width="1"/>
+  <circle cx="101" cy="511" r="4" fill="#00e5cc"/>
+  <text x="113" y="515" font-family="monospace" font-size="11" fill="#00e5cc">LIVE</text>
+
+  <!-- Decorative chart bars (right side) -->
+  <g opacity="0.4">
+    <rect x="720" y="200" width="40" height="280" rx="4" fill="url(#bar1)"/>
+    <rect x="780" y="260" width="40" height="220" rx="4" fill="url(#bar2)"/>
+    <rect x="840" y="180" width="40" height="300" rx="4" fill="url(#bar1)"/>
+    <rect x="900" y="300" width="40" height="180" rx="4" fill="url(#bar3)"/>
+    <rect x="960" y="220" width="40" height="260" rx="4" fill="url(#bar2)"/>
+    <rect x="1020" y="160" width="40" height="320" rx="4" fill="url(#bar1)"/>
+    <rect x="1080" y="240" width="40" height="240" rx="4" fill="url(#bar2)"/>
+  </g>
+
+  <!-- Bottom border -->
+  <rect x="0" y="628" width="1200" height="2" fill="rgba(255,255,255,0.05)"/>
+</svg>
