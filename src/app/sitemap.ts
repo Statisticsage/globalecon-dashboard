@@ -1,6 +1,6 @@
 import { MetadataRoute } from "next";
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = process.env.NEXT_PUBLIC_BASE_URL ?? "https://macrolens.vercel.app";
+  const base = process.env.NEXT_PUBLIC_BASE_URL ?? "https://globaleconmacrolens.vercel.app";
   return [
     {url:base,             lastModified:new Date(),changeFrequency:"daily",  priority:1},
     {url:`${base}/#gdp`,       lastModified:new Date(),changeFrequency:"weekly",priority:0.8},
