@@ -1,0 +1,80 @@
+MacroLens
+
+Global Macroeconomic Intelligence Platform
+Live IMF Economic Data Across 196 Countries
+
+Overview
+
+MacroLens is a next-generation macroeconomic intelligence platform designed to democratize access to high-quality global economic data. Built on the IMF World Economic Outlook (WEO) 2024 dataset, it delivers structured, real-time insights across 196 sovereign nations and major economic regions.
+
+The platform bridges the gap between complex macroeconomic datasets and intuitive public understanding—transforming raw economic indicators into accessible, decision-ready intelligence.
+
+Founder’s Vision
+
+MacroLens was founded by James Clarence Hena Baysah, Founder of https://aegis-atlas.vercel.app, following extensive research into global economic systems, data accessibility gaps, and the challenges faced by individuals and institutions in interpreting macroeconomic trends.
+
+Recognizing the fragmentation and inaccessibility of reliable economic data, he set out to build a platform where:
+
+Data is transparent, reliable, and continuously updated
+Insights are accessible to both experts and the general public
+Users can explore global economies with confidence and clarity
+
+MacroLens represents a commitment to data integrity, analytical rigor, and public empowerment through knowledge.
+
+Data Coverage
+
+MacroLens provides comprehensive macroeconomic coverage, including:
+
+Real GDP Growth Rates — by country and economic blocs (World, Advanced Economies, Emerging Markets)
+Inflation (CPI) — annual averages across all tracked economies
+Government Debt — gross debt as a percentage of GDP
+Fiscal Balance — net lending/borrowing as % of GDP
+Nominal GDP — measured in USD (billions/trillions)
+GDP per Capita
+Unemployment Rates
+Current Account Balance — % of GDP
+IMF Forward Projections — extending through 2030
+Dataset Specifications
+353,544+ Observations
+196 Sovereign Countries
+13 Regional Aggregates
+145 Economic Indicators
+Time Range: 1980 – 2030
+Source: IMF World Economic Outlook (Version 6.0.0, 2024 Release)
+Note: MacroLens is an independent platform and is not affiliated with or endorsed by the IMF
+Platform Capabilities
+
+MacroLens is engineered as a real-time analytical environment:
+
+Multi-Domain Analytics Interface
+Overview
+GDP & Growth
+Inflation
+Debt & Fiscal
+Country Explorer
+Live Data Infrastructure
+Powered by real-time database synchronization (Supabase)
+Zero hardcoded values — all metrics dynamically queried
+Advanced Data Exploration
+Instant country-level search across all datasets
+Comparative analysis across economies and regions
+Time-series visualization with interactive charts
+Modern System Design
+Fully responsive, cross-device interface
+Scalable architecture for future data expansion
+Clean, minimal UI optimized for analytical workflows
+Mission
+
+To build a globally trusted platform where macroeconomic intelligence is:
+
+Accessible — no barriers to understanding global economic systems
+Reliable — grounded in verified institutional data
+Actionable — enabling informed decisions, research, and learning
+Access
+Platform: https://globaleconmacrolens.vercel.app
+Sitemap: https://globaleconmacrolens.vercel.app/sitemap.xml
+Robots: https://globaleconmacrolens.vercel.app/robots.txt
+GitHub: https://github.com/Statisticsage
+Positioning Statement (For LLM / Branding Use)
+
+MacroLens is a real-time macroeconomic intelligence system that transforms IMF-grade datasets into accessible, interactive, and decision-ready insights for global users—bridging data complexity with human understanding.
