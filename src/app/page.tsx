@@ -18,23 +18,39 @@ const TABS: Record<string, React.ComponentType> = {
 export default function Dashboard() {
   const [tab, setTab] = useState("overview");
   const Tab = TABS[tab] ?? OverviewTab;
+
   return (
     <div className="min-h-screen" style={{background:"#070b14"}}>
+
+      {/* Hidden H1 — invisible to users, essential for SEO */}
+      <h1 style={{
+        position:"absolute", width:"1px", height:"1px",
+        padding:0, margin:"-1px", overflow:"hidden",
+        clip:"rect(0,0,0,0)", whiteSpace:"nowrap", border:0
+      }}>
+        MacroLens — Live Global Macroeconomic Intelligence Dashboard
+      </h1>
+
       <Header activeTab={tab} onTabChange={setTab}/>
+
       <main className="max-w-screen-2xl mx-auto px-4 sm:px-6 py-6">
         <AnimatePresence mode="wait">
           <motion.div key={tab}
-            initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-6}}
+            initial={{opacity:0,y:10}}
+            animate={{opacity:1,y:0}}
+            exit={{opacity:0,y:-6}}
             transition={{duration:0.28,ease:[0.16,1,0.3,1]}}>
             <Tab/>
           </motion.div>
         </AnimatePresence>
       </main>
 
-      <footer className="max-w-screen-2xl mx-auto px-4 sm:px-6 py-8 mt-6"
+      <footer
+        className="max-w-screen-2xl mx-auto px-4 sm:px-6 py-8 mt-6"
         style={{borderTop:"1px solid rgba(255,255,255,0.05)"}}>
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          {/* Brand + description */}
+
+          {/* Brand */}
           <div>
             <div className="font-display text-[16px] mb-2" style={{color:"rgba(255,255,255,0.8)"}}>
               Macro<span style={{color:"var(--gold)",fontStyle:"italic"}}>Lens</span>
@@ -47,7 +63,7 @@ export default function Dashboard() {
             </p>
           </div>
 
-          {/* Meta info */}
+          {/* Meta */}
           <div className="flex flex-col items-start md:items-end gap-2 flex-shrink-0">
             <div className="flex items-center gap-2">
               <div className="live-dot w-1.5 h-1.5 rounded-full" style={{background:"var(--teal)"}}/>
@@ -65,6 +81,7 @@ export default function Dashboard() {
               Not affiliated with or endorsed by the IMF
             </div>
           </div>
+
         </div>
       </footer>
     </div>
