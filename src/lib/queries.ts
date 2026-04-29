@@ -114,6 +114,23 @@ export async function fetchDebtRankings() {
   }));
 }
 
+export async function fetchKeyDebtCountries() {
+  const { data } = await supabase
+    .schema("datawarehouse")
+    .from("weo_economic")
+    .select("country_clean,value")
+    .ilike("series_code", "%GGXWDG_NGDP%")
+    .in("country_clean", ["Japan", "United States", "Germany"])
+    .eq("year", 2023)
+    .eq("is_forecast", false);
+
+  const result: Record<string, number> = {};
+  for (const r of data ?? []) {
+    result[r.country_clean] = +Number(r.value).toFixed(1);
+  }
+  return result;
+}
+
 export async function fetchFiscalBalance() {
   const { data } = await supabase.schema(S).from("weo_economic")
     .select("country_clean,value").ilike("series_code","%GGXCNL_NGDP%")
@@ -130,7 +147,7 @@ export async function fetchLiveInsights() {
   const [indiaR,japanR,germanyR,inf22R,inf23R,usaR] = await Promise.all([
     supabase.schema(S).from("weo_economic").select("value").eq("country_clean","India").ilike("series_code","%NGDP_RPCH%").eq("year",2023).eq("is_forecast",false).single(),
     supabase.schema(S).from("weo_economic").select("value").eq("country_clean","Japan").ilike("series_code","%GGXWDG_NGDP%").eq("year",2023).eq("is_forecast",false).single(),
-    supabase.schema(S).from("weo_economic").select("value").eq("country_clean","Germany").ilike("series_code","%NGDP_RPCH%").eq("year",2023).eq("is_forecast",false).single(),
+    supabase.schema(S).from("weo_economic").select("value").ilike("country_clean","%Germany%").ilike("series_code","%NGDP_RPCH%").eq("year",2023).eq("is_forecast",false).single(),
     supabase.schema(S).from("weo_economic").select("value").eq("series_code","G001.PCPIPCH.A").eq("year",2022).single(),
     supabase.schema(S).from("weo_economic").select("value").eq("series_code","G001.PCPIPCH.A").eq("year",2023).single(),
     supabase.schema(S).from("weo_economic").select("value").eq("country_clean","United States").ilike("series_code","%NGDP_RPCH%").eq("year",2023).eq("is_forecast",false).single(),

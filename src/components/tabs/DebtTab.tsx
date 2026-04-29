@@ -6,7 +6,7 @@ import KpiCard from "../KpiCard";
 import ChartCard from "../ChartCard";
 import BarRace from "../BarRace";
 import { SkeletonChart,SkeletonKpi } from "../Skeleton";
-import { fetchDebtTrend,fetchDebtRankings,fetchFiscalBalance } from "@/lib/queries";
+import { fetchDebtTrend,fetchDebtRankings,fetchFiscalBalance,fetchKeyDebtCountries } from "@/lib/queries";
 
 const TT=({active,payload,label}:any)=>{
   if(!active||!payload?.length)return null;
@@ -22,20 +22,21 @@ const DEBT_COLORS:Record<string,string>={Japan:"#f87171",USA:"#60a5fa",Germany:"
 export default function DebtTab(){
   const[trend,setTrend]   = useState<any[]>([]);
   const[rank,setRank]     = useState<any[]>([]);
+  const[keyCountries,setKeyCountries] = useState<Record<string,number>>({});
   const[fiscal,setFiscal] = useState<any>({surpluses:[],deficits:[]});
   const[loading,setLoading] = useState(true);
 
   useEffect(()=>{
-    Promise.all([fetchDebtTrend(),fetchDebtRankings(),fetchFiscalBalance()])
-      .then(([t,r,f])=>{setTrend(t);setRank(r);setFiscal(f);setLoading(false);});
+    Promise.all([fetchDebtTrend(),fetchDebtRankings(),fetchFiscalBalance(),fetchKeyDebtCountries()])
+      .then(([t,r,f,k])=>{setTrend(t);setRank(r);setFiscal(f);setKeyCountries(k);setLoading(false);});
   },[]);
 
-  const japan   = rank.find((r:any)=>r.country==="Japan");
-  const usa     = rank.find((r:any)=>r.country.includes("United States"));
-  const germany = rank.find((r:any)=>r.country==="Germany");
-  const japanNote = japan ? `${(japan.value/90).toFixed(1)}x the IMF 90% sustainability threshold` : undefined;
-  const japanProse = japan
-    ? `Japan at ${japan.value.toFixed(0)}% is a notable outlier — ultra-low yields and domestic creditors have kept it stable, but the long-term risk is elevated.`
+  const japanVal   = keyCountries["Japan"];
+  const usaVal     = keyCountries["United States"];
+  const germanyVal = keyCountries["Germany"];
+  const japanNote  = japanVal ? `${(japanVal/90).toFixed(1)}x the IMF 90% sustainability threshold` : undefined;
+  const japanProse = japanVal
+    ? `Japan at ${japanVal.toFixed(0)}% is a notable outlier - ultra-low yields and domestic creditors have kept it stable, but the long-term risk is elevated.`
     : "";
 
   return(
@@ -43,16 +44,16 @@ export default function DebtTab(){
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {loading ? Array.from({length:4}).map((_,i)=><SkeletonKpi key={i}/>) : <>
           <KpiCard
-            label={japan ? "Japan — highest advanced economy" : "Highest debt 2023"}
-            value={japan ? japan.value.toFixed(0) : (rank[0]?.value.toFixed(0) ?? "—")}
+            label={japanVal ? "Japan - highest advanced economy" : "Highest debt 2023"}
+            value={japanVal ? japanVal.toFixed(0) : (rank[0]?.value.toFixed(0) ?? "-")}
             suffix="%" accent="coral" delay={0.05}
             sub="Govt gross debt / GDP" note={japanNote}/>
           <KpiCard label="USA federal debt 2023"
-            value={usa ? usa.value.toFixed(0) : "—"}
+            value={usaVal ? usaVal.toFixed(0) : "-"}
             suffix="%" accent="cobalt" delay={0.10}
             sub="Post-COVID fiscal expansion"/>
           <KpiCard label="Germany 2023"
-            value={germany ? germany.value.toFixed(0) : "—"}
+            value={germanyVal ? germanyVal.toFixed(0) : "-"}
             suffix="%" accent="teal" delay={0.15}
             sub="EU fiscal anchor"/>
           <KpiCard label="IMF risk threshold" value="90" suffix="%" accent="gold" delay={0.20}
@@ -62,7 +63,7 @@ export default function DebtTab(){
       </div>
 
       {loading ? <SkeletonChart height={260}/> : (
-        <ChartCard title="Government debt as % of GDP" subtitle="Annual % — Japan, USA, Germany, Greece, Italy, UK — 2000 to 2023" delay={0.1} source="IMF Fiscal Monitor 2024">
+        <ChartCard title="Government debt as % of GDP" subtitle="Annual % - Japan, USA, Germany, Greece, Italy, UK - 2000 to 2023" delay={0.1} source="IMF Fiscal Monitor 2024">
           <div className="flex flex-wrap gap-4 mb-4">
             {Object.entries(DEBT_COLORS).map(([name,color])=>(
               <div key={name} className="flex items-center gap-1.5">
@@ -90,7 +91,7 @@ export default function DebtTab(){
       )}
 
       <div className="grid md:grid-cols-2 gap-5">
-        <ChartCard title="Highest debt/GDP ratios 2023" subtitle="Government gross debt as % of GDP — top 12 countries" delay={0.2} source="IMF WEO 2024">
+        <ChartCard title="Highest debt/GDP ratios 2023" subtitle="Government gross debt as % of GDP - top 12 countries" delay={0.2} source="IMF WEO 2024">
           {!rank.length ? <div className="h-56 skeleton rounded-xl"/> :
             <BarRace data={rank.map(d=>({label:d.country,value:d.value,display:d.display}))}
               colorFn={i=>i<3?"#f87171":i<6?"#d4a843":"#60a5fa"}/>}
@@ -116,7 +117,7 @@ export default function DebtTab(){
         <div className="font-mono text-[9px] uppercase tracking-wider mb-1.5" style={{color:"var(--muted2)"}}>Reading guide</div>
         <p className="text-[11px] leading-relaxed" style={{color:"rgba(255,255,255,0.45)"}}>
           Debt/GDP compares total government borrowing to the economy size. The IMF flags 90% as a sustainability threshold
-          — above it, debt servicing can crowd out productive spending. {japanProse} A fiscal surplus means government
+          - above it, debt servicing can crowd out productive spending. {japanProse} A fiscal surplus means government
           collected more than it spent that year; a deficit means it borrowed the shortfall.
         </p>
       </motion.div>
