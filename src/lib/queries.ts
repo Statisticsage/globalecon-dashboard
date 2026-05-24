@@ -19,7 +19,7 @@ export async function fetchKpis() {
 export async function fetchGdpTrend() {
   const { data } = await supabase.schema(S).from("weo_economic")
     .select("country_clean,year,value")
-    .in("series_code",["G001.NGDP_RPCH.A","G110.NGDP_RPCH.A","G201.NGDP_RPCH.A"])
+    .in("series_code",["G001.NGDP_RPCH.A","G110.NGDP_RPCH.A","G200.NGDP_RPCH.A"])
     .eq("is_forecast",false).gte("year",2000).lte("year",2024).order("year");
   const map: Record<number,any> = {};
   for (const r of data??[]) {
@@ -64,7 +64,7 @@ export async function fetchGdpPerCapita() {
 export async function fetchInflationTrend() {
   const { data } = await supabase.schema(S).from("weo_economic")
     .select("country_clean,year,value")
-    .in("series_code",["G001.PCPIPCH.A","G110.PCPIPCH.A","G201.PCPIPCH.A"])
+    .in("series_code",["G001.PCPIPCH.A","G110.PCPIPCH.A","G200.PCPIPCH.A"])
     .eq("is_forecast",false).gte("year",2000).lte("year",2024).order("year");
   const map: Record<number,any> = {};
   for (const r of data??[]) {
