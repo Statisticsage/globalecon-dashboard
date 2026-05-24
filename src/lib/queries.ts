@@ -32,33 +32,47 @@ export async function fetchGdpTrend() {
 }
 
 export async function fetchTopGdpCountries() {
+  // FIX 1: Use exact series_code suffix match to avoid ilike '%NGDPD.A%' also
+  //         matching BCA_NGDPD.A — which pollutes results with 387 rows instead of 196.
+  //         Series codes follow pattern <ISO3>.NGDPD.A — match only those.
+  // FIX 2: Cast value_scaled to Number() — Postgres numeric returns as string over REST API.
   const { data } = await supabase.schema(S).from("weo_economic")
     .select("country_clean,value_scaled")
-    .ilike("series_code","%NGDPD.A%")
+    .like("series_code","%.NGDPD.A")
     .eq("region_type_refined","Country").eq("year",2023).eq("is_forecast",false)
-    .order("value_scaled",{ascending:false}).limit(12);
-  return (data??[]).filter((r:any)=>r.value_scaled>0).map((r:any)=>{
-    const usd = r.value_scaled;
-    const display = usd>=1e12 ? `$${(usd/1e12).toFixed(1)}T` : `$${(usd/1e9).toFixed(0)}B`;
-    return {
-      country: r.country_clean.replace(", People'S Republic Of","").replace(", Islamic Republic Of","").replace(", Rep.","").substring(0,20),
-      value: Math.round(usd/1e12*100)/100,
-      display,
-    };
-  });
+    .order("value_scaled",{ascending:false}).limit(15);
+  return (data??[])
+    .filter((r:any) => Number(r.value_scaled) > 0)
+    .slice(0, 12)
+    .map((r:any) => {
+      const usd = Number(r.value_scaled);
+      const display = usd >= 1e12 ? `$${(usd/1e12).toFixed(1)}T` : `$${(usd/1e9).toFixed(0)}B`;
+      return {
+        country: r.country_clean
+          .replace(", People'S Republic Of","")
+          .replace(", Islamic Republic Of","")
+          .replace(", Rep.","")
+          .substring(0,20),
+        value: Math.round(usd/1e12*100)/100,
+        display,
+      };
+    });
 }
 
 export async function fetchGdpPerCapita() {
   const { data } = await supabase.schema(S).from("weo_economic")
     .select("country_clean,value")
-    .ilike("series_code","%NGDPDPC.A%")
+    .like("series_code","%.NGDPDPC.A")
     .eq("region_type_refined","Country").eq("year",2023).eq("is_forecast",false)
-    .order("value",{ascending:false}).limit(12);
-  return (data??[]).filter((r:any)=>r.value>5000).map((r:any)=>({
-    country: r.country_clean.replace(", People'S Republic Of","").substring(0,18),
-    value: Math.round(r.value),
-    display: `$${Math.round(r.value/1000)}K`,
-  }));
+    .order("value",{ascending:false}).limit(20);
+  return (data??[])
+    .filter((r:any) => Number(r.value) > 5000)
+    .slice(0, 12)
+    .map((r:any) => ({
+      country: r.country_clean.replace(", People'S Republic Of","").substring(0,18),
+      value: Math.round(Number(r.value)),
+      display: `$${Math.round(Number(r.value)/1000)}K`,
+    }));
 }
 
 export async function fetchInflationTrend() {
@@ -78,19 +92,21 @@ export async function fetchInflationTrend() {
 
 export async function fetchInflationExtremes() {
   const { data } = await supabase.schema(S).from("weo_economic")
-    .select("country_clean,value").ilike("series_code","%PCPIPCH%")
+    .select("country_clean,value")
+    .like("series_code","%.PCPIPCH.A")
     .eq("region_type_refined","Country").eq("year",2022).eq("is_forecast",false)
     .gt("value",20).order("value",{ascending:false}).limit(10);
-  return (data??[]).map((r:any)=>({
+  return (data??[]).map((r:any) => ({
     country: r.country_clean.substring(0,18),
     value: +Number(r.value).toFixed(1),
-    display: `${Math.round(r.value)}%`,
+    display: `${Math.round(Number(r.value))}%`,
   }));
 }
 
 export async function fetchDebtTrend() {
   const { data } = await supabase.schema(S).from("weo_economic")
-    .select("country_clean,year,value").ilike("series_code","%GGXWDG_NGDP%")
+    .select("country_clean,year,value")
+    .like("series_code","%.GGXWDG_NGDP.A")
     .in("country_clean",["Japan","United States","Germany","Greece","Italy","United Kingdom"])
     .eq("is_forecast",false).gte("year",2000).lte("year",2023).order("year");
   const map: Record<number,any> = {};
@@ -104,26 +120,25 @@ export async function fetchDebtTrend() {
 
 export async function fetchDebtRankings() {
   const { data } = await supabase.schema(S).from("weo_economic")
-    .select("country_clean,value").ilike("series_code","%GGXWDG_NGDP%")
+    .select("country_clean,value")
+    .like("series_code","%.GGXWDG_NGDP.A")
     .eq("region_type_refined","Country").eq("year",2023).eq("is_forecast",false)
     .order("value",{ascending:false}).limit(12);
-  return (data??[]).filter((r:any)=>r.value>0).map((r:any)=>({
-    country: r.country_clean.substring(0,18),
-    value: +Number(r.value).toFixed(1),
-    display: `${Math.round(r.value)}%`,
-  }));
+  return (data??[])
+    .filter((r:any) => Number(r.value) > 0)
+    .map((r:any) => ({
+      country: r.country_clean.substring(0,18),
+      value: +Number(r.value).toFixed(1),
+      display: `${Math.round(Number(r.value))}%`,
+    }));
 }
 
 export async function fetchKeyDebtCountries() {
-  const { data } = await supabase
-    .schema("datawarehouse")
-    .from("weo_economic")
+  const { data } = await supabase.schema(S).from("weo_economic")
     .select("country_clean,value")
-    .ilike("series_code", "%GGXWDG_NGDP%")
-    .in("country_clean", ["Japan", "United States", "Germany"])
-    .eq("year", 2023)
-    .eq("is_forecast", false);
-
+    .like("series_code","%.GGXWDG_NGDP.A")
+    .in("country_clean",["Japan","United States","Germany"])
+    .eq("year",2023).eq("is_forecast",false);
   const result: Record<string, number> = {};
   for (const r of data ?? []) {
     result[r.country_clean] = +Number(r.value).toFixed(1);
@@ -133,24 +148,33 @@ export async function fetchKeyDebtCountries() {
 
 export async function fetchFiscalBalance() {
   const { data } = await supabase.schema(S).from("weo_economic")
-    .select("country_clean,value").ilike("series_code","%GGXCNL_NGDP%")
+    .select("country_clean,value")
+    .like("series_code","%.GGXCNL_NGDP.A")
     .eq("region_type_refined","Country").eq("year",2023).eq("is_forecast",false)
     .order("value",{ascending:false});
-  const arr = (data??[]).filter((r:any)=>r.value!=null);
+  const arr = (data??[]).filter((r:any) => r.value != null);
   return {
-    surpluses: arr.slice(0,6).map((r:any)=>({country:r.country_clean.substring(0,16),value:+Number(r.value).toFixed(1),display:`+${Number(r.value).toFixed(1)}%`})),
-    deficits:  arr.slice(-6).reverse().map((r:any)=>({country:r.country_clean.substring(0,16),value:Math.abs(+Number(r.value).toFixed(1)),display:`${Number(r.value).toFixed(1)}%`})),
+    surpluses: arr.slice(0,6).map((r:any) => ({
+      country: r.country_clean.substring(0,16),
+      value: +Number(r.value).toFixed(1),
+      display: `+${Number(r.value).toFixed(1)}%`,
+    })),
+    deficits: arr.slice(-6).reverse().map((r:any) => ({
+      country: r.country_clean.substring(0,16),
+      value: Math.abs(+Number(r.value).toFixed(1)),
+      display: `${Number(r.value).toFixed(1)}%`,
+    })),
   };
 }
 
 export async function fetchLiveInsights() {
   const [indiaR,japanR,germanyR,inf22R,inf23R,usaR] = await Promise.all([
-    supabase.schema(S).from("weo_economic").select("value").eq("country_clean","India").ilike("series_code","%NGDP_RPCH%").eq("year",2023).eq("is_forecast",false).single(),
-    supabase.schema(S).from("weo_economic").select("value").eq("country_clean","Japan").ilike("series_code","%GGXWDG_NGDP%").eq("year",2023).eq("is_forecast",false).single(),
-    supabase.schema(S).from("weo_economic").select("value").ilike("country_clean","%Germany%").ilike("series_code","%NGDP_RPCH%").eq("year",2023).eq("is_forecast",false).single(),
+    supabase.schema(S).from("weo_economic").select("value").eq("country_clean","India").like("series_code","%.NGDP_RPCH.A").eq("year",2023).eq("is_forecast",false).single(),
+    supabase.schema(S).from("weo_economic").select("value").eq("country_clean","Japan").like("series_code","%.GGXWDG_NGDP.A").eq("year",2023).eq("is_forecast",false).single(),
+    supabase.schema(S).from("weo_economic").select("value").eq("country_clean","Germany").like("series_code","%.NGDP_RPCH.A").eq("year",2023).eq("is_forecast",false).single(),
     supabase.schema(S).from("weo_economic").select("value").eq("series_code","G001.PCPIPCH.A").eq("year",2022).single(),
     supabase.schema(S).from("weo_economic").select("value").eq("series_code","G001.PCPIPCH.A").eq("year",2023).single(),
-    supabase.schema(S).from("weo_economic").select("value").eq("country_clean","United States").ilike("series_code","%NGDP_RPCH%").eq("year",2023).eq("is_forecast",false).single(),
+    supabase.schema(S).from("weo_economic").select("value").eq("country_clean","United States").like("series_code","%.NGDP_RPCH.A").eq("year",2023).eq("is_forecast",false).single(),
   ]);
   return {
     indiaGdp:   Number(indiaR.data?.value   ?? 9.19),
@@ -168,7 +192,7 @@ export async function searchCountries(query: string): Promise<string[]> {
   const { data } = await supabase.schema(S).from("weo_economic")
     .select("country_clean").ilike("country_clean",`%${query}%`)
     .eq("region_type_refined","Country").limit(200);
-  return [...new Set((data??[]).map((r:any)=>r.country_clean as string))].sort().slice(0,10);
+  return [...new Set((data??[]).map((r:any) => r.country_clean as string))].sort().slice(0,10);
 }
 
 export async function fetchCountryProfile(country: string) {
@@ -179,11 +203,11 @@ export async function fetchCountryProfile(country: string) {
   const map: Record<number,any> = {};
   for (const r of data??[]) {
     if (!map[r.year]) map[r.year] = {year:r.year};
-    if (r.series_code.includes("NGDP_RPCH"))   map[r.year].gdpGrowth    = +Number(r.value).toFixed(2);
-    if (r.series_code.includes("PCPIPCH"))      map[r.year].inflation    = +Number(r.value).toFixed(2);
-    if (r.series_code.includes("LUR"))          map[r.year].unemployment = +Number(r.value).toFixed(2);
-    if (r.series_code.includes("NGDPD.A"))      map[r.year].gdpUsd       = r.value_scaled ? r.value_scaled : null;
-    if (r.series_code.includes("GGXWDG_NGDP")) map[r.year].debtGdp      = +Number(r.value).toFixed(1);
+    if (r.series_code.includes("NGDP_RPCH"))   map[r.year].gdpGrowth      = +Number(r.value).toFixed(2);
+    if (r.series_code.includes("PCPIPCH"))      map[r.year].inflation      = +Number(r.value).toFixed(2);
+    if (r.series_code.includes("LUR"))          map[r.year].unemployment   = +Number(r.value).toFixed(2);
+    if (r.series_code.endsWith("NGDPD.A"))      map[r.year].gdpUsd         = r.value_scaled ? Number(r.value_scaled) : null;
+    if (r.series_code.includes("GGXWDG_NGDP")) map[r.year].debtGdp        = +Number(r.value).toFixed(1);
     if (r.series_code.includes("BCA_NGDPD"))    map[r.year].currentAccount = +Number(r.value).toFixed(2);
   }
   return Object.values(map).sort((a:any,b:any)=>a.year-b.year);
@@ -194,5 +218,5 @@ export async function fetchGroupComposition() {
   const results = await Promise.all(groups.map(g =>
     supabase.schema(S).from("weo_economic").select("weo_id",{count:"exact",head:true}).eq("indicator_group",g)
   ));
-  return groups.map((g,i) => ({group:g, count:results[i].count??0}));
+  return groups.map((g,i) => ({group:g, count:results[i].count ?? 0}));
 }
